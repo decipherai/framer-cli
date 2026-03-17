@@ -82,6 +82,9 @@ Current blog image fields:
 - \`OlVYsaJ0N\` — author profile image
 - \`k1F9wAHMm\` — thumbnail
 
+For blog thumbnails, do not default to a random external image. Prefer generating a topical SVG locally and rasterizing it to PNG.
+Keep the design simple enough to survive small preview cards.
+
 When reading an existing item back, the image field usually comes back as an object. Reuse the URL from \`value.url\`, then write that URL string back into the next payload.
 
 ## Safest Image Workflow
@@ -95,6 +98,46 @@ framer-cli blog get --slug "existing-post-slug"
 \`\`\`
 
 Then copy the image URL you want to reuse into the new item payload.
+
+## Preferred Thumbnail Workflow
+
+For new blog posts, prefer this instead:
+
+1. Generate a simple SVG at \`1200x630\`.
+2. Render it to PNG with \`sips -s format png input.svg --out output.png\`.
+3. Use the PNG for the blog thumbnail field.
+4. After Framer ingests the image, reuse the returned Framer-hosted URL on later updates.
+
+The local SVG->PNG path is deterministic and keeps thumbnails aligned with the post title and subject.
+
+Design rules:
+
+- Use one main headline.
+- Use at most one short supporting line.
+- Prefer plain background shapes over complex illustration.
+- Keep generous padding on all sides.
+- If text is getting long, shorten the copy instead of shrinking the font aggressively.
+- Avoid small labels, pills, badges, and decorative widgets unless they are clearly necessary.
+
+Minimal example:
+
+\`\`\`svg
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0d1b24"/>
+  <text x="84" y="250" fill="#f4fff6" font-size="82" font-family="Arial, Helvetica, sans-serif" font-weight="700">
+    Playwright 2026
+  </text>
+  <text x="84" y="332" fill="#8df06f" font-size="38" font-family="Arial, Helvetica, sans-serif">
+    Timeline, UI Mode, and upgrade changes
+  </text>
+</svg>
+\`\`\`
+
+Rasterize it:
+
+\`\`\`bash
+sips -s format png blog-card.svg --out blog-card.png
+\`\`\`
 
 ## Dates
 
