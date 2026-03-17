@@ -61,7 +61,31 @@ This writes:
 
 It also adds the required CLI permissions to `.claude/settings.json`.
 
-After install, invoke the skill as `/framer`.
+## Use As A Skill
+
+The CLI binary is still `framer-cli`, but the installed Claude skill name is `framer`.
+
+That means the normal flow is:
+
+```bash
+npm install
+npm run build
+node dist/index.js init
+```
+
+After that, invoke the skill as:
+
+```text
+/framer
+/framer blog
+/framer publish
+```
+
+If you re-run setup and want to overwrite the existing skill files, use:
+
+```bash
+node dist/index.js init --force
+```
 
 ## How To Run
 
