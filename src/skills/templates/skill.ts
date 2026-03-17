@@ -1,5 +1,5 @@
 export const SKILL_TEMPLATE = `---
-name: framer-cli
+name: framer
 description: >-
   Manages a Framer website through the local framer-cli command and the Framer Server API.
   Use when inspecting the Framer project, listing collections and fields, reading or updating CMS items,
@@ -10,7 +10,7 @@ description: >-
 
 <!-- skill-version: {{FRAMER_CLI_VERSION}} -->
 
-# /framer-cli — Framer CLI Agent
+# /framer — Framer CLI Agent
 
 ## Version Check (run once per session)
 
@@ -25,7 +25,7 @@ Before doing anything else:
    \`\`\`bash
    node dist/index.js init --force
    \`\`\`
-   Then tell the user to re-invoke \`/framer-cli\` and stop.
+   Then tell the user to re-invoke \`/framer\` and stop.
 7. Do not repeat this check again in the same conversation.
 
 ## CLI Resolution
@@ -62,11 +62,11 @@ Route based on the first word(s) of \`$ARGUMENTS\`:
 - **Natural language blog/CMS requests** → Treat as \`blog\`. Read \`blog.md\` and follow it.
 - **Natural language formatting requests** → Treat as \`content\`. Read \`content.md\` and follow it.
 - **Empty or unrecognized** → Show the available commands:
-  - \`/framer-cli blog\` — Create, inspect, update, or remove blog posts
-  - \`/framer-cli cms\` — Work with generic CMS collections and items
-  - \`/framer-cli content\` — Formatting, markdown, HTML, image, and field-data guidance
-  - \`/framer-cli publish\` — Inspect publish/deploy state and perform publish/deploy actions
-  - \`/framer-cli cli\` — CLI command reference and troubleshooting
+  - \`/framer blog\` — Create, inspect, update, or remove blog posts
+  - \`/framer cms\` — Work with generic CMS collections and items
+  - \`/framer content\` — Formatting, markdown, HTML, image, and field-data guidance
+  - \`/framer publish\` — Inspect publish/deploy state and perform publish/deploy actions
+  - \`/framer cli\` — CLI command reference and troubleshooting
 
 ## Important Rules
 

@@ -5,7 +5,7 @@ Thin CLI wrapper around the Framer Server API for shell-driven agents and automa
 It has two jobs:
 
 - provide a small agent-friendly CLI for Framer project and CMS operations
-- scaffold a Claude skill under `.claude/skills/framer-cli/`
+- scaffold a Claude skill under `.claude/skills/framer/`
 
 ## Requirements
 
@@ -54,12 +54,59 @@ node dist/index.js init --force
 
 This writes:
 
-- `.claude/skills/framer-cli/SKILL.md`
-- `.claude/skills/framer-cli/cli.md`
-- `.claude/skills/framer-cli/blog.md`
-- `.claude/skills/framer-cli/content.md`
+- `.claude/skills/framer/SKILL.md`
+- `.claude/skills/framer/cli.md`
+- `.claude/skills/framer/blog.md`
+- `.claude/skills/framer/content.md`
 
 It also adds the required CLI permissions to `.claude/settings.json`.
+
+## Use As A Skill
+
+The CLI binary is still `framer-cli`, but the installed Claude skill name is `framer`.
+
+That means the normal flow is:
+
+```bash
+npm install
+npm run build
+node dist/index.js init
+```
+
+After that, invoke the skill as:
+
+```text
+/framer
+/framer blog
+/framer publish
+```
+
+If you re-run setup and want to overwrite the existing skill files, use:
+
+```bash
+node dist/index.js init --force
+```
+
+## Using It In Claude
+
+After running `node dist/index.js init`, open Claude in the same repository and use the skill with the `/framer` slash command.
+
+Examples:
+
+```text
+/framer
+/framer blog create a draft post about Playwright
+/framer blog update the thumbnail for the latest post
+/framer publish
+```
+
+What this does:
+
+- Claude reads `.claude/skills/framer/SKILL.md`
+- the skill routes the request to the right helper guide (`blog`, `content`, `cli`)
+- those guides tell Claude when to run the local `framer-cli` command
+
+So the user-facing entrypoint in Claude is `/framer`, while the underlying executable remains `framer-cli`.
 
 ## How To Run
 

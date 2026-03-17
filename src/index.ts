@@ -102,19 +102,19 @@ void noteText;
 
 const SKILL_FILES: SkillFile[] = [
   {
-    relPath: ".claude/skills/framer-cli/SKILL.md",
+    relPath: ".claude/skills/framer/SKILL.md",
     content: SKILL_TEMPLATE,
   },
   {
-    relPath: ".claude/skills/framer-cli/cli.md",
+    relPath: ".claude/skills/framer/cli.md",
     content: CLI_TEMPLATE,
   },
   {
-    relPath: ".claude/skills/framer-cli/blog.md",
+    relPath: ".claude/skills/framer/blog.md",
     content: BLOG_TEMPLATE,
   },
   {
-    relPath: ".claude/skills/framer-cli/content.md",
+    relPath: ".claude/skills/framer/content.md",
     content: CONTENT_TEMPLATE,
   },
 ];
