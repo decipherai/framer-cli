@@ -1,0 +1,46 @@
+{
+  "name": "@decipher-sdk/framer-api-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "decipher-framer": "dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc -p tsconfig.json --noEmit",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "dev": "tsc -p tsconfig.json --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Decipher AI",
+  "license": "UNLICENSED",
+  "description": "Thin CLI wrapper around the Framer Server API for agent-friendly automation.",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "framer-api": "^0.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.4.3"
+  },
+  "keywords": [
+    "decipher",
+    "framer",
+    "cli",
+    "agent"
+  ]
+}
