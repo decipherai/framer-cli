@@ -613,7 +613,7 @@ function findGitRoot(startDir: string) {
 }
 
 function materializeSkillFile(content: string) {
-  return content.replaceAll("{{DECIPHER_FRAMER_VERSION}}", packageJson.version);
+  return content.replaceAll("{{FRAMER_CLI_VERSION}}", packageJson.version);
 }
 
 function ensureClaudeSettings(rootDir: string) {

@@ -7,7 +7,7 @@ description: >-
   deployment information, or scaffolding the Framer skill into a repository.
 ---
 
-<!-- skill-version: {{DECIPHER_FRAMER_VERSION}} -->
+<!-- skill-version: {{FRAMER_CLI_VERSION}} -->
 
 # /framer-cli — Framer CLI Agent
 
