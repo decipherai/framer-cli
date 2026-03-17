@@ -5,7 +5,7 @@ Thin CLI wrapper around the Framer Server API for shell-driven agents and automa
 It has two jobs:
 
 - provide a small agent-friendly CLI for Framer project and CMS operations
-- scaffold a Claude skill under `.claude/skills/framer-cli/`
+- scaffold a Claude skill under `.claude/skills/framer/`
 
 ## Requirements
 
@@ -54,12 +54,14 @@ node dist/index.js init --force
 
 This writes:
 
-- `.claude/skills/framer-cli/SKILL.md`
-- `.claude/skills/framer-cli/cli.md`
-- `.claude/skills/framer-cli/blog.md`
-- `.claude/skills/framer-cli/content.md`
+- `.claude/skills/framer/SKILL.md`
+- `.claude/skills/framer/cli.md`
+- `.claude/skills/framer/blog.md`
+- `.claude/skills/framer/content.md`
 
 It also adds the required CLI permissions to `.claude/settings.json`.
+
+After install, invoke the skill as `/framer`.
 
 ## How To Run
 
