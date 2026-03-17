@@ -1,23 +1,23 @@
-export const CLI_TEMPLATE = `# CLI — Decipher Framer Command Reference
+export const CLI_TEMPLATE = `# CLI — Framer CLI Command Reference
 
-This is the command reference for the \`decipher-framer\` CLI.
+This is the command reference for the \`framer-cli\` CLI.
 
 ## Preferred Invocation Order
 
 Use commands in this order:
 
-1. \`decipher-framer ...\`
-2. \`node framer-api-cli/dist/index.js ...\`
-3. \`npm exec --workspace @decipher-sdk/framer-api-cli decipher-framer ...\`
+1. \`framer-cli ...\`
+2. \`node dist/index.js ...\`
+3. \`npx framer-cli ...\`
 
-In this repository, prefer \`node framer-api-cli/dist/index.js ...\` after the CLI has been built.
+In this repository, prefer \`node dist/index.js ...\` after the CLI has been built.
 
 ## Build
 
 If the built CLI is missing, run:
 
 \`\`\`bash
-npm run build --workspace @decipher-sdk/framer-api-cli
+npm run build
 \`\`\`
 
 ## Configuration
@@ -35,74 +35,74 @@ Required values:
 
 ## Global Flag: \`--note\`
 
-For parity with \`decipher-qa\`, every command may include \`--note "<short reason>"\`.
+Every command may include \`--note "<short reason>"\`.
 
-- The Framer CLI accepts \`--note\` for agent ergonomics and ignores it after parsing.
+- The CLI accepts \`--note\` for observability and ignores it after parsing.
 - Keep notes to one sentence.
 - Example:
 
 \`\`\`bash
-decipher-framer blog list --limit 20 --note "Checking recent posts before creating a new draft"
+framer-cli blog list --limit 20 --note "Checking recent posts before creating a new draft"
 \`\`\`
 
 ## Top-Level Commands
 
-### \`decipher-framer init\`
+### \`framer-cli init\`
 
-Scaffold the Framer skill into the nearest git repository.
+Scaffold the skill into the nearest git repository.
 
 \`\`\`bash
-decipher-framer init
-decipher-framer init --force
+framer-cli init
+framer-cli init --force
 \`\`\`
 
-### \`decipher-framer methods\`
+### \`framer-cli methods\`
 
 List the supported low-level \`call\` methods.
 
 \`\`\`bash
-decipher-framer methods
+framer-cli methods
 \`\`\`
 
-### \`decipher-framer call <method>\`
+### \`framer-cli call <method>\`
 
 Invoke the supported Framer Server API methods that are directly wrapped by the CLI.
 
 \`\`\`bash
-decipher-framer call getProjectInfo
-decipher-framer call getPublishInfo
-decipher-framer call getDeployments
-decipher-framer call getChangedPaths
-decipher-framer call getChangeContributors --args '[1,5]'
-decipher-framer call publish --allow-write
-decipher-framer call deploy --args '["deployment_id",["example.com"]]' --allow-write
+framer-cli call getProjectInfo
+framer-cli call getPublishInfo
+framer-cli call getDeployments
+framer-cli call getChangedPaths
+framer-cli call getChangeContributors --args '[1,5]'
+framer-cli call publish --allow-write
+framer-cli call deploy --args '["deployment_id",["example.com"]]' --allow-write
 \`\`\`
 
 Use \`--raw\` only for string-returning methods.
 
-### \`decipher-framer cms ...\`
+### \`framer-cli cms ...\`
 
 Generic CMS commands.
 
 \`\`\`bash
-decipher-framer cms collections
-decipher-framer cms fields Blog
-decipher-framer cms items Blog --limit 20
-decipher-framer cms get-item Blog --slug "my-post"
-decipher-framer cms upsert-item Blog --item-file post.json --allow-write
-decipher-framer cms remove-item Blog --slug "old-post" --allow-write
+framer-cli cms collections
+framer-cli cms fields Blog
+framer-cli cms items Blog --limit 20
+framer-cli cms get-item Blog --slug "my-post"
+framer-cli cms upsert-item Blog --item-file post.json --allow-write
+framer-cli cms remove-item Blog --slug "old-post" --allow-write
 \`\`\`
 
-### \`decipher-framer blog ...\`
+### \`framer-cli blog ...\`
 
 Convenience wrappers around the current \`Blog\` collection.
 
 \`\`\`bash
-decipher-framer blog fields
-decipher-framer blog list --limit 20
-decipher-framer blog get --slug "my-post"
-decipher-framer blog upsert --item-file post.json --allow-write
-decipher-framer blog remove --slug "old-post" --allow-write
+framer-cli blog fields
+framer-cli blog list --limit 20
+framer-cli blog get --slug "my-post"
+framer-cli blog upsert --item-file post.json --allow-write
+framer-cli blog remove --slug "old-post" --allow-write
 \`\`\`
 
 \`blog upsert\` and \`cms upsert-item\` behave as true upserts:
@@ -160,7 +160,7 @@ If the API returns \`This method is only available to Framer employees\`, stop r
 
 - \`Missing API key\` → Set \`FRAMER_API_KEY\` or add it to \`.env\`.
 - \`Missing project\` → Set \`FRAMER_PROJECT_URL\` or \`FRAMER_PROJECT_ID\`.
-- \`Collection "<x>" not found\` → Run \`decipher-framer cms collections\` first and use the exact id or name.
+- \`Collection "<x>" not found\` → Run \`framer-cli cms collections\` first and use the exact id or name.
 - \`Collection item not found for selector ...\` → Re-check the item id or slug with \`blog list\` or \`cms items <collection>\`.
 - \`Provide exactly one of --id or --slug\` → Narrow the target item selector.
 - \`--allow-write\` required → Re-run the mutating command with \`--allow-write\`.

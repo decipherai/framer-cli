@@ -1,11 +1,11 @@
-# `decipher-framer`
+# `framer-cli`
 
 Thin CLI wrapper around the Framer Server API for shell-driven agents and automation.
 
 It has two jobs:
 
 - provide a small agent-friendly CLI for Framer project and CMS operations
-- scaffold a Claude skill under `.claude/skills/decipher-framer/` with the same general ergonomics as `decipher-qa`
+- scaffold a Claude skill under `.claude/skills/framer-cli/`
 
 ## Requirements
 
@@ -54,10 +54,10 @@ node dist/index.js init --force
 
 This writes:
 
-- `.claude/skills/decipher-framer/SKILL.md`
-- `.claude/skills/decipher-framer/cli.md`
-- `.claude/skills/decipher-framer/blog.md`
-- `.claude/skills/decipher-framer/content.md`
+- `.claude/skills/framer-cli/SKILL.md`
+- `.claude/skills/framer-cli/cli.md`
+- `.claude/skills/framer-cli/blog.md`
+- `.claude/skills/framer-cli/content.md`
 
 It also adds the required CLI permissions to `.claude/settings.json`.
 
@@ -65,9 +65,9 @@ It also adds the required CLI permissions to `.claude/settings.json`.
 
 Preferred invocation order:
 
-1. `decipher-framer ...`
+1. `framer-cli ...`
 2. `node dist/index.js ...`
-3. `npx @decipher-sdk/framer-api-cli ...`
+3. `npx framer-cli ...`
 
 Examples:
 
@@ -78,7 +78,7 @@ node dist/index.js blog fields
 
 ## Agent Ergonomics
 
-For parity with `decipher-qa`, the CLI accepts `--note "<short reason>"` on every command and ignores it after parsing.
+The CLI accepts `--note "<short reason>"` on every command and ignores it after parsing.
 
 Examples:
 
@@ -122,7 +122,7 @@ node dist/index.js cms remove-item Blog --slug "old-post" --allow-write
 
 ### `blog ...`
 
-Convenience wrappers for the current `Blog` collection in the Decipher Framer project.
+Convenience wrappers for the current `Blog` collection.
 
 ```bash
 node dist/index.js blog fields
@@ -193,7 +193,7 @@ You can pass it with:
 
 ## Blog Content Notes
 
-The current Decipher Framer `Blog` collection uses these field ids:
+The current Framer `Blog` collection uses these field ids:
 
 - `Pfx5_b5ap` — title
 - `qTKsMl_6r` — category enum

@@ -91,7 +91,7 @@ The safest path is to reuse a known-good Framer-hosted image URL from an existin
 Inspect a current post:
 
 \`\`\`bash
-decipher-framer blog get --slug "existing-post-slug"
+framer-cli blog get --slug "existing-post-slug"
 \`\`\`
 
 Then copy the image URL you want to reuse into the new item payload.

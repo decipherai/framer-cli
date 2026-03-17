@@ -4,13 +4,13 @@ Use this guide for blog-post creation, editing, verification, and deletion.
 
 ## Current Blog Collection
 
-The current Decipher Framer project has a user-managed collection named \`Blog\`.
+The current Framer project has a user-managed collection named \`Blog\`.
 
 Use these commands to inspect it:
 
 \`\`\`bash
-decipher-framer blog fields
-decipher-framer blog list --limit 20
+framer-cli blog fields
+framer-cli blog list --limit 20
 \`\`\`
 
 ## Current Blog Field Map
@@ -38,7 +38,7 @@ When writing an enum field, use the case ID, not the label.
 1. Inspect the current schema:
 
 \`\`\`bash
-decipher-framer blog fields
+framer-cli blog fields
 \`\`\`
 
 2. Prepare a JSON payload and set \`draft: true\`.
@@ -73,11 +73,11 @@ decipher-framer blog fields
     },
     "vbshpsmrv": {
       "type": "string",
-      "value": "Michael Rosenfield"
+      "value": "Author Name"
     },
     "V1tA1xhKv": {
       "type": "string",
-      "value": "Co-founder"
+      "value": "Author Title"
     },
     "i9ezyRZxC": {
       "type": "date",
@@ -101,13 +101,13 @@ decipher-framer blog fields
 Write the payload to a file, then:
 
 \`\`\`bash
-decipher-framer blog upsert --item-file post.json --allow-write
+framer-cli blog upsert --item-file post.json --allow-write
 \`\`\`
 
 Read it back:
 
 \`\`\`bash
-decipher-framer blog get --slug "test-post-slug"
+framer-cli blog get --slug "test-post-slug"
 \`\`\`
 
 ## Update An Existing Post
@@ -129,7 +129,7 @@ When reusing an existing image from a read response, copy the nested URL:
 ## Delete A Post
 
 \`\`\`bash
-decipher-framer blog remove --slug "test-post-slug" --allow-write
+framer-cli blog remove --slug "test-post-slug" --allow-write
 \`\`\`
 
 ## Generic CMS Commands
@@ -137,11 +137,11 @@ decipher-framer blog remove --slug "test-post-slug" --allow-write
 If the task is not specific to the \`Blog\` collection, use the \`cms\` namespace directly:
 
 \`\`\`bash
-decipher-framer cms collections
-decipher-framer cms fields <collection>
-decipher-framer cms items <collection>
-decipher-framer cms get-item <collection> --slug "<slug>"
-decipher-framer cms upsert-item <collection> --item-file item.json --allow-write
+framer-cli cms collections
+framer-cli cms fields <collection>
+framer-cli cms items <collection>
+framer-cli cms get-item <collection> --slug "<slug>"
+framer-cli cms upsert-item <collection> --item-file item.json --allow-write
 \`\`\`
 
 ## Working Rules
@@ -149,5 +149,5 @@ decipher-framer cms upsert-item <collection> --item-file item.json --allow-write
 - Default new posts to drafts.
 - Verify the item after every write.
 - Confirm the current schema before relying on hard-coded field IDs if the collection may have changed.
-- Prefer the blog wrapper commands for the current Decipher site because they target the existing \`Blog\` collection directly.
+- Prefer the blog wrapper commands because they target the existing \`Blog\` collection directly.
 `;

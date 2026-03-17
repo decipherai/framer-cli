@@ -21,7 +21,7 @@ import {
   SKILL_TEMPLATE,
 } from "./skills/templates/index.js";
 
-const CLI_NAME = "decipher-framer";
+const CLI_NAME = "framer-cli";
 const BLOG_COLLECTION_NAME = "Blog";
 const require = createRequire(import.meta.url);
 const packageJson = require("../package.json") as { version: string };
@@ -102,27 +102,27 @@ void noteText;
 
 const SKILL_FILES: SkillFile[] = [
   {
-    relPath: ".claude/skills/decipher-framer/SKILL.md",
+    relPath: ".claude/skills/framer-cli/SKILL.md",
     content: SKILL_TEMPLATE,
   },
   {
-    relPath: ".claude/skills/decipher-framer/cli.md",
+    relPath: ".claude/skills/framer-cli/cli.md",
     content: CLI_TEMPLATE,
   },
   {
-    relPath: ".claude/skills/decipher-framer/blog.md",
+    relPath: ".claude/skills/framer-cli/blog.md",
     content: BLOG_TEMPLATE,
   },
   {
-    relPath: ".claude/skills/decipher-framer/content.md",
+    relPath: ".claude/skills/framer-cli/content.md",
     content: CONTENT_TEMPLATE,
   },
 ];
 
 const REQUIRED_PERMISSIONS = [
-  "Bash(decipher-framer:*)",
-  "Bash(node framer-api-cli/dist/index.js:*)",
-  "Bash(npm exec --workspace @decipher-sdk/framer-api-cli decipher-framer:*)",
+  "Bash(framer-cli:*)",
+  "Bash(node dist/index.js:*)",
+  "Bash(npx framer-cli:*)",
 ];
 
 loadEnvFileIfPresent();
@@ -243,7 +243,7 @@ program
 
 program
   .command("init")
-  .description("Scaffold Decipher Framer skill files into the nearest git repository")
+  .description("Scaffold framer-cli skill files into the nearest git repository")
   .option("-f, --force", "Overwrite existing skill files", false)
   .option("--no-git-check", "Use the current directory instead of searching for a git root")
   .action(async (options: InitOptions) => {
@@ -297,7 +297,7 @@ withConnectionOptions(
   program
     .command("call")
     .description("Invoke a supported Framer method")
-    .argument("<method>", "Method name from `decipher-framer methods`")
+    .argument("<method>", "Method name from `framer-cli methods`")
     .option("--args <json>", "Inline JSON array of method arguments")
     .option("--args-file <path>", "Read a JSON array of method arguments from a file or '-' for stdin")
     .option("--allow-write", "Allow mutating methods like applyAgentChanges, publish, and deploy")
