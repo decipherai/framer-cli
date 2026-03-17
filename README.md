@@ -87,6 +87,27 @@ If you re-run setup and want to overwrite the existing skill files, use:
 node dist/index.js init --force
 ```
 
+## Using It In Claude
+
+After running `node dist/index.js init`, open Claude in the same repository and use the skill with the `/framer` slash command.
+
+Examples:
+
+```text
+/framer
+/framer blog create a draft post about Playwright
+/framer blog update the thumbnail for the latest post
+/framer publish
+```
+
+What this does:
+
+- Claude reads `.claude/skills/framer/SKILL.md`
+- the skill routes the request to the right helper guide (`blog`, `content`, `cli`)
+- those guides tell Claude when to run the local `framer-cli` command
+
+So the user-facing entrypoint in Claude is `/framer`, while the underlying executable remains `framer-cli`.
+
 ## How To Run
 
 Preferred invocation order:
