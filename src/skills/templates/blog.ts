@@ -1,6 +1,6 @@
 export const BLOG_TEMPLATE = `# Blog And CMS Workflows
 
-Use this guide for blog-post creation, editing, verification, and deletion.
+Use this guide for blog-post creation, editing, verification, deletion, and thumbnail generation.
 
 ## Current Blog Collection
 
@@ -42,9 +42,10 @@ framer-cli blog fields
 \`\`\`
 
 2. Prepare a JSON payload and set \`draft: true\`.
-3. Create or update the post with \`blog upsert\`.
-4. Read the post back with \`blog get\`.
-5. Only publish the site if the user explicitly asks for a publish.
+3. Generate a relevant thumbnail as SVG, rasterize it to PNG, and use that PNG for \`k1F9wAHMm\`.
+4. Create or update the post with \`blog upsert\`.
+5. Read the post back with \`blog get\`.
+6. Only publish the site if the user explicitly asks for a publish.
 
 \`blog upsert\` updates an existing item when the payload includes either:
 
@@ -110,6 +111,40 @@ Read it back:
 framer-cli blog get --slug "test-post-slug"
 \`\`\`
 
+## Blog Thumbnail Workflow
+
+Prefer generating a fresh blog image instead of reusing an unrelated thumbnail.
+
+Use this workflow:
+
+1. Write a simple SVG sized for social/blog cards at \`1200x630\`.
+2. Keep the layout simple and safe:
+   use one short headline, optional one short supporting line, and no busy decorative elements.
+3. Keep wide margins and leave empty space around the text block so nothing feels cramped at preview sizes.
+4. Avoid long labels, dense copy, oversized icons, or multiple visual focal points.
+5. Rasterize the SVG to PNG with \`sips\`.
+6. Use the PNG path or uploaded Framer-hosted URL for \`k1F9wAHMm\`.
+
+Example:
+
+\`\`\`bash
+cat > blog-card.svg <<'SVG'
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0d1b24"/>
+  <text x="84" y="250" fill="#f4fff6" font-size="82" font-family="Arial, Helvetica, sans-serif" font-weight="700">
+    Playwright in 2026
+  </text>
+  <text x="84" y="332" fill="#8df06f" font-size="38" font-family="Arial, Helvetica, sans-serif">
+    Timeline, UI Mode, and upgrade changes
+  </text>
+</svg>
+SVG
+
+sips -s format png blog-card.svg --out blog-card.png
+\`\`\`
+
+After writing the post, read it back and prefer the Framer-hosted URL returned by \`fieldData.k1F9wAHMm.value.url\` for future updates.
+
 ## Update An Existing Post
 
 Use one of these patterns:
@@ -147,6 +182,8 @@ framer-cli cms upsert-item <collection> --item-file item.json --allow-write
 ## Working Rules
 
 - Default new posts to drafts.
+- Default thumbnails to a new SVG-rendered PNG unless the user explicitly asks to reuse an existing image.
+- Keep thumbnails simple. If a design feels crowded, remove elements instead of adding more layout structure.
 - Verify the item after every write.
 - Confirm the current schema before relying on hard-coded field IDs if the collection may have changed.
 - Prefer the blog wrapper commands because they target the existing \`Blog\` collection directly.

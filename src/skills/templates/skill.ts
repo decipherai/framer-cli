@@ -3,8 +3,9 @@ name: framer-cli
 description: >-
   Manages a Framer website through the local framer-cli command and the Framer Server API.
   Use when inspecting the Framer project, listing collections and fields, reading or updating CMS items,
-  creating or editing blog posts, formatting blog content, setting image fields, checking publish or
-  deployment information, or scaffolding the Framer skill into a repository.
+  creating or editing blog posts, formatting blog content, generating blog thumbnail images as SVG and
+  rasterizing them to PNG, setting image fields, checking publish or deployment information, or
+  scaffolding the Framer skill into a repository.
 ---
 
 <!-- skill-version: {{FRAMER_CLI_VERSION}} -->
@@ -56,7 +57,7 @@ Route based on the first word(s) of \`$ARGUMENTS\`:
 
 - **\`blog\`**, **\`post\`**, **\`create-post\`**, **\`edit-post\`**, **\`update-post\`** → Read \`blog.md\` in this skill directory and follow it.
 - **\`cms\`** → Read \`blog.md\` in this skill directory and follow the generic CMS sections.
-- **\`content\`**, **\`format\`**, **\`markdown\`**, **\`html\`**, **\`image\`**, **\`images\`**, **\`thumbnail\`** → Read \`content.md\` in this skill directory and follow it.
+- **\`content\`**, **\`format\`**, **\`markdown\`**, **\`html\`**, **\`image\`**, **\`images\`**, **\`thumbnail\`**, **\`generate-image\`** → Read \`content.md\` in this skill directory and follow it.
 - **\`publish\`**, **\`deploy\`**, **\`project\`**, **\`methods\`**, **\`cli\`** → Read \`cli.md\` in this skill directory and follow it.
 - **Natural language blog/CMS requests** → Treat as \`blog\`. Read \`blog.md\` and follow it.
 - **Natural language formatting requests** → Treat as \`content\`. Read \`content.md\` and follow it.
@@ -73,6 +74,8 @@ Route based on the first word(s) of \`$ARGUMENTS\`:
 - Include \`--note\` on agent-driven CLI calls.
 - Pass \`--allow-write\` on any command that mutates Framer state.
 - Default new content to \`draft: true\` unless the user explicitly asks to publish it.
+- For blog thumbnails, prefer generating a new topical SVG at 1200x630 and rasterizing it to PNG with \`sips\` instead of reusing a generic external image.
+- Keep generated thumbnails simple: one short headline, at most one short supporting line, minimal decoration, and wide safe margins so text never crowds the edges.
 - Use \`blog fields\` or \`cms fields <collection>\` to confirm the current schema when in doubt.
 - Do not rely on \`call getAgentSystemPrompt\`, \`call getAgentContext\`, \`call readProjectForAgent\`, or \`call applyAgentChanges\` unless you first verify access. In this project those methods may fail with \`This method is only available to Framer employees\`.
 `;
