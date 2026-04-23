@@ -2,6 +2,8 @@
 
 `framer-cli` is an agent-friendly command line wrapper around Framer's Server API. It gives shell scripts, AI coding agents, and local automation a predictable JSON interface for inspecting Framer projects, reading and writing CMS content, and triggering publish or deploy operations.
 
+> `framer-cli` is an unofficial community tool. It is not affiliated with, endorsed by, or supported by Framer or the Framer team.
+
 The package also includes an optional Claude skill scaffold. Running `framer-cli init` writes a `/framer` skill into a repository so Claude can use the CLI with focused guidance for Framer CMS and blog workflows.
 
 ## What It Does
