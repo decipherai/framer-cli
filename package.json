@@ -23,9 +23,17 @@
     "dev": "tsc -p tsconfig.json --watch",
     "prepublishOnly": "npm run build"
   },
-  "author": "Open Source",
-  "license": "UNLICENSED",
-  "description": "Thin CLI wrapper around the Framer Server API for agent-friendly automation.",
+  "author": "Decipher",
+  "license": "MIT",
+  "description": "Agent-friendly CLI wrapper around the Framer Server API.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/decipherai/framer-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/decipherai/framer-cli/issues"
+  },
+  "homepage": "https://github.com/decipherai/framer-cli#readme",
   "engines": {
     "node": ">=22"
   },
@@ -39,7 +47,10 @@
   },
   "keywords": [
     "framer",
+    "framer-api",
+    "cms",
     "cli",
-    "agent"
+    "agent",
+    "automation"
   ]
 }

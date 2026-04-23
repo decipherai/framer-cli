@@ -1,12 +1,16 @@
 export const CONTENT_TEMPLATE = `# Content Formatting, Markdown, HTML, And Images
 
-Use this guide when writing \`formattedText\` or \`image\` CMS fields.
+Use this guide when writing \`formattedText\`, \`image\`, \`date\`, \`string\`, or \`enum\` CMS fields.
+
+Always inspect the project's current field IDs first:
+
+\`\`\`bash
+framer-cli cms fields <collection> --pretty
+\`\`\`
 
 ## Formatted Text
 
-The \`Content\` field in the current \`Blog\` collection is a \`formattedText\` field.
-
-When writing it, prefer explicit \`contentType\` values.
+When writing \`formattedText\` fields, prefer explicit \`contentType\` values.
 
 ### Markdown
 
@@ -77,24 +81,16 @@ Pattern:
 }
 \`\`\`
 
-Current blog image fields:
-
-- \`OlVYsaJ0N\` — author profile image
-- \`k1F9wAHMm\` — thumbnail
-
-For blog thumbnails, do not default to a random external image. Prefer generating a topical SVG locally and rasterizing it to PNG.
-Keep the design simple enough to survive small preview cards.
-
-When reading an existing item back, the image field usually comes back as an object. Reuse the URL from \`value.url\`, then write that URL string back into the next payload.
+When reading an existing item back, image fields usually come back as objects. Reuse the URL from \`value.url\`, then write that URL string back into the next payload.
 
 ## Safest Image Workflow
 
 The safest path is to reuse a known-good Framer-hosted image URL from an existing item.
 
-Inspect a current post:
+Inspect a current item:
 
 \`\`\`bash
-framer-cli blog get --slug "existing-post-slug"
+framer-cli cms get-item <collection> --slug "existing-item-slug" --pretty
 \`\`\`
 
 Then copy the image URL you want to reuse into the new item payload.
@@ -108,7 +104,7 @@ For new blog posts, prefer this instead:
 3. Use the PNG for the blog thumbnail field.
 4. After Framer ingests the image, reuse the returned Framer-hosted URL on later updates.
 
-The local SVG->PNG path is deterministic and keeps thumbnails aligned with the post title and subject.
+The local SVG-to-PNG path is deterministic and keeps thumbnails aligned with the post title and subject.
 
 Design rules:
 
@@ -165,16 +161,14 @@ Use:
 
 Use the enum case ID, not the human-readable label.
 
-Example for the current \`Blog\` \`Category\` field:
-
 \`\`\`json
 {
   "type": "enum",
-  "value": "rmnYJpMx8"
+  "value": "ENUM_CASE_ID"
 }
 \`\`\`
 
-\`rmnYJpMx8\` maps to \`Article\`.
+Run \`framer-cli cms fields <collection> --pretty\` to see the case IDs for the current project.
 
 ## Practical Rule Of Thumb
 
