@@ -1,0 +1,15 @@
+{
+  "slug": "example-post",
+  "draft": true,
+  "fieldData": {
+    "TITLE_FIELD_ID": {
+      "type": "string",
+      "value": "Example Blog Post"
+    },
+    "CONTENT_FIELD_ID": {
+      "type": "formattedText",
+      "contentType": "markdown",
+      "value": "# Example Blog Post\n\nThis draft was created with `framer-cli`."
+    }
+  }
+}

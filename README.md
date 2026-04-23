@@ -1,55 +1,184 @@
-# `framer-cli`
+# framer-cli
 
-Thin CLI wrapper around the Framer Server API for shell-driven agents and automation.
+`framer-cli` is an agent-friendly command line wrapper around Framer's Server API. It gives shell scripts, AI coding agents, and local automation a predictable JSON interface for inspecting Framer projects, reading and writing CMS content, and triggering publish or deploy operations.
 
-It has two jobs:
+The package also includes an optional Claude skill scaffold. Running `framer-cli init` writes a `/framer` skill into a repository so Claude can use the CLI with focused guidance for Framer CMS and blog workflows.
 
-- provide a small agent-friendly CLI for Framer project and CMS operations
-- scaffold a Claude skill under `.claude/skills/framer/`
+## What It Does
+
+- Lists Framer project metadata, publish state, deployments, and changed paths.
+- Reads Framer CMS collections, fields, and items.
+- Creates, updates, or removes CMS items with explicit `--allow-write` confirmation.
+- Provides convenience commands for projects with a `Blog` collection.
+- Accepts JSON from flags, files, or stdin for repeatable automation.
+- Emits JSON output and JSON errors so agents can parse results safely.
+- Scaffolds a Claude skill under `.claude/skills/framer/`.
 
 ## Requirements
 
-- Node 22+
-- A Framer Server API key for the target project
-- A Framer project URL or project ID
+- Node.js 22 or newer.
+- A Framer Server API key.
+- A Framer project URL or project ID.
 
-The Node 22 requirement comes from Framer's official `framer-api` package.
+The Node.js 22 requirement comes from Framer's official `framer-api` package.
+
+## Install From Source
+
+```bash
+git clone https://github.com/decipherai/framer-cli.git
+cd framer-cli
+npm install
+npm run build
+```
+
+Run the local build:
+
+```bash
+node dist/index.js --help
+node dist/index.js methods --pretty
+```
+
+For local development, you can also link the binary:
+
+```bash
+npm link
+framer-cli --help
+```
 
 ## Configuration
 
 The CLI reads configuration in this order:
 
-1. Command-line flags
-2. Environment variables
-3. A `.env` file in the current working directory
+1. Command-line flags.
+2. Environment variables.
+3. A `.env` file in the current working directory.
 
-Supported variables:
-
-- `FRAMER_API_KEY`
-- `FRAMER_PROJECT_URL`
-- `FRAMER_PROJECT_ID`
-
-Example `.env`:
+Supported values:
 
 ```dotenv
+FRAMER_API_KEY="your_framer_server_api_key"
 FRAMER_PROJECT_URL="https://framer.com/projects/Your-Project--abc123"
-FRAMER_API_KEY="your_api_key"
+# or:
+FRAMER_PROJECT_ID="abc123"
 ```
 
-## Install
+You can copy `.env.example` to `.env` and fill in your own values. Keep `.env` out of git.
+
+## Quick Start
+
+Inspect a project:
 
 ```bash
-npm install
-npm run build
+framer-cli call getProjectInfo --pretty
+framer-cli call getPublishInfo --pretty
+framer-cli cms collections --pretty
 ```
 
-## Skill Setup
-
-Generate the Claude skill files and permissions:
+Inspect a CMS collection:
 
 ```bash
-node dist/index.js init
-node dist/index.js init --force
+framer-cli cms fields Blog --pretty
+framer-cli cms items Blog --limit 10 --pretty
+```
+
+Create or update a CMS item from a file:
+
+```bash
+framer-cli cms upsert-item Blog --item-file examples/blog-post.json --allow-write --pretty
+```
+
+Publish only when you intend to mutate the live project:
+
+```bash
+framer-cli call publish --allow-write --pretty
+```
+
+## Safety Model
+
+Read commands run without extra confirmation. Mutating commands require `--allow-write`.
+
+Commands that require `--allow-write` include:
+
+- `framer-cli call applyAgentChanges`
+- `framer-cli call publish`
+- `framer-cli call deploy`
+- `framer-cli cms upsert-item`
+- `framer-cli cms remove-item`
+- `framer-cli blog upsert`
+- `framer-cli blog remove`
+
+This makes it harder for an agent or script to accidentally change a project while it is still gathering context.
+
+## Command Reference
+
+### `methods`
+
+List the low-level Framer method wrappers supported by this CLI.
+
+```bash
+framer-cli methods --pretty
+```
+
+### `call <method>`
+
+Invoke a supported low-level Framer method.
+
+```bash
+framer-cli call getProjectInfo --pretty
+framer-cli call getDeployments --pretty
+framer-cli call getChangeContributors --args '[1,5]' --pretty
+framer-cli call deploy --args '["deployment_id",["example.com"]]' --allow-write --pretty
+```
+
+`call` expects method arguments as a JSON array. You can pass the array inline, from a file, or through stdin:
+
+```bash
+framer-cli call deploy --args-file deploy-args.json --allow-write
+
+printf '%s\n' '["deployment_id",["example.com"]]' | \
+  framer-cli call deploy --args-file - --allow-write
+```
+
+### `cms ...`
+
+Generic CMS collection and item commands.
+
+```bash
+framer-cli cms collections --pretty
+framer-cli cms fields Blog --pretty
+framer-cli cms items Blog --limit 20 --pretty
+framer-cli cms get-item Blog --slug "my-post" --pretty
+framer-cli cms upsert-item Blog --item-file post.json --allow-write --pretty
+framer-cli cms remove-item Blog --slug "old-post" --allow-write --pretty
+```
+
+### `blog ...`
+
+Convenience commands for projects that use a `Blog` collection.
+
+```bash
+framer-cli blog fields --pretty
+framer-cli blog list --limit 20 --pretty
+framer-cli blog get --slug "my-post" --pretty
+framer-cli blog upsert --item-file post.json --allow-write --pretty
+framer-cli blog remove --slug "old-post" --allow-write --pretty
+```
+
+`blog upsert` and `cms upsert-item` behave as upserts:
+
+- If the payload includes an existing `id`, the CLI updates that item.
+- Otherwise, if the payload slug matches an existing item, the CLI updates by slug.
+- Otherwise, the CLI creates a new item.
+- On updates, the CLI preserves the current draft state unless you explicitly set `draft` or pass `--draft` / `--published`.
+- On id-based updates, the CLI preserves the current slug unless you explicitly change it.
+
+### `init`
+
+Scaffold the Claude skill into the nearest git repository.
+
+```bash
+framer-cli init
+framer-cli init --force
 ```
 
 This writes:
@@ -61,225 +190,68 @@ This writes:
 
 It also adds the required CLI permissions to `.claude/settings.json`.
 
-## Use As A Skill
-
-The CLI binary is still `framer-cli`, but the installed Claude skill name is `framer`.
-
-That means the normal flow is:
-
-```bash
-npm install
-npm run build
-node dist/index.js init
-```
-
-After that, invoke the skill as:
+After setup, use the skill in Claude with:
 
 ```text
 /framer
-/framer blog
+/framer blog create a draft post about our launch
 /framer publish
 ```
 
-If you re-run setup and want to overwrite the existing skill files, use:
+## CMS Item Payloads
 
-```bash
-node dist/index.js init --force
-```
-
-## Using It In Claude
-
-After running `node dist/index.js init`, open Claude in the same repository and use the skill with the `/framer` slash command.
-
-Examples:
-
-```text
-/framer
-/framer blog create a draft post about Playwright
-/framer blog update the thumbnail for the latest post
-/framer publish
-```
-
-What this does:
-
-- Claude reads `.claude/skills/framer/SKILL.md`
-- the skill routes the request to the right helper guide (`blog`, `content`, `cli`)
-- those guides tell Claude when to run the local `framer-cli` command
-
-So the user-facing entrypoint in Claude is `/framer`, while the underlying executable remains `framer-cli`.
-
-## How To Run
-
-Preferred invocation order:
-
-1. `framer-cli ...`
-2. `node dist/index.js ...`
-3. `npx framer-cli ...`
-
-Examples:
-
-```bash
-node dist/index.js methods
-node dist/index.js blog fields
-```
-
-## Agent Ergonomics
-
-The CLI accepts `--note "<short reason>"` on every command and ignores it after parsing.
-
-Examples:
-
-```bash
-node dist/index.js blog list --limit 10 --note "Checking recent posts before creating a draft"
-node dist/index.js blog upsert --item-file post.json --allow-write --note "Creating the requested draft post"
-```
-
-## Commands
-
-### `methods`
-
-List the supported low-level Framer method wrappers.
-
-```bash
-node dist/index.js methods
-```
-
-### `call <method>`
-
-Invoke one of the supported low-level Framer methods.
-
-```bash
-node dist/index.js call getProjectInfo
-node dist/index.js call getPublishInfo
-node dist/index.js call deploy --args '["deployment_id",["example.com"]]' --allow-write
-```
-
-### `cms ...`
-
-Generic CMS collection and item commands.
-
-```bash
-node dist/index.js cms collections
-node dist/index.js cms fields Blog
-node dist/index.js cms items Blog --limit 20
-node dist/index.js cms get-item Blog --slug "my-post"
-node dist/index.js cms upsert-item Blog --item-file post.json --allow-write
-node dist/index.js cms remove-item Blog --slug "old-post" --allow-write
-```
-
-### `blog ...`
-
-Convenience wrappers for the current `Blog` collection.
-
-```bash
-node dist/index.js blog fields
-node dist/index.js blog list --limit 20
-node dist/index.js blog get --slug "my-post"
-node dist/index.js blog upsert --item-file post.json --allow-write
-node dist/index.js blog remove --slug "old-post" --allow-write
-```
-
-`blog upsert` and `cms upsert-item` behave as real upserts:
-
-- if the payload includes an existing `id`, the CLI updates that item
-- otherwise, if the payload slug matches an existing item, the CLI updates by slug
-- otherwise, the CLI creates a new item
-- on updates, the CLI preserves the current draft state unless you explicitly change it
-- on id-based updates, the CLI preserves the current slug unless you explicitly change it
-
-## Passing Input
-
-### `call`
-
-`call` expects a JSON array of method arguments.
-
-Inline JSON:
-
-```bash
-node dist/index.js call getChangeContributors --args '[1,5]'
-```
-
-From a file:
-
-```bash
-node dist/index.js call deploy --args-file deploy-args.json --allow-write
-```
-
-From stdin:
-
-```bash
-printf '%s\n' '["deployment_id",["example.com"]]' | \
-  node dist/index.js call deploy --args-file - --allow-write
-```
-
-### `cms upsert-item` and `blog upsert`
-
-These expect a single JSON object.
-
-Payload shape:
+`cms upsert-item` and `blog upsert` expect a single JSON object:
 
 ```json
 {
-  "id": "optional-existing-item-id",
-  "slug": "required-for-new-items",
+  "slug": "example-post",
   "draft": true,
   "fieldData": {
     "FIELD_ID": {
       "type": "string",
-      "value": "Example"
+      "value": "Example value"
     }
   }
 }
 ```
 
-You can pass it with:
+Use `framer-cli cms fields <collection>` before writing. Framer CMS writes use field IDs, not display labels, and enum fields require enum case IDs.
+
+You can provide item payloads with:
 
 - `--item '<json>'`
 - `--item-file /path/to/file.json`
 - `--item-file -` to read from stdin
 
-## Blog Content Notes
+## Agent Notes
 
-The current Framer `Blog` collection uses these field ids:
+Every command accepts `--note "<short reason>"`. The CLI parses and ignores it, which lets agents record why a command is being run without affecting behavior.
 
-- `Pfx5_b5ap` — title
-- `qTKsMl_6r` — category enum
-- `OlVYsaJ0N` — author profile image
-- `vbshpsmrv` — author
-- `V1tA1xhKv` — author job title
-- `i9ezyRZxC` — date
-- `k1F9wAHMm` — thumbnail
-- `dBE2k2jxM` — formatted content
+```bash
+framer-cli blog list --limit 10 --note "Checking recent posts before creating a draft"
+framer-cli blog upsert --item-file post.json --allow-write --note "Creating the requested draft post"
+```
 
-Important write rules:
+## Development
 
-- Formatted text should use `contentType: "markdown"` if you want Markdown syntax like `**bold**`
-- Use `contentType: "html"` if you are writing raw tags like `<strong>`
-- Enum fields require the enum case id when writing, not the label
-- Image fields accept a URL string when writing
-- When reading an existing item, image fields typically come back as objects, so reuse `fieldData.<fieldId>.value.url`
+```bash
+npm install
+npm run check-types
+npm run build
+npm pack --dry-run
+```
 
-## Output
-
-- Results are emitted as JSON by default
-- Use `--pretty` for formatted JSON
-- Use `--raw` only for methods that truly return strings
-- Errors are emitted to stderr as JSON
-
-## Known Limitation
-
-These low-level methods exist in the Framer SDK but may fail in this project with `This method is only available to Framer employees`:
-
-- `getAgentSystemPrompt`
-- `getAgentContext`
-- `readProjectForAgent`
-- `applyAgentChanges`
-
-When that happens, use the project and CMS commands instead.
+The source lives in `src/`. The compiled package output goes to `dist/`.
 
 ## Troubleshooting
 
-- `Missing API key` means `FRAMER_API_KEY` was not provided by flag, env var, or `.env`.
-- `Missing project` means `FRAMER_PROJECT_URL` or `FRAMER_PROJECT_ID` was not provided.
-- `Collection item not found for selector ...` means the requested id or slug does not exist in that collection; use `blog list` or `cms items <collection>` to find the correct item first.
-- `--allow-write` errors mean the command is mutating state and must be re-run with explicit write approval.
+- `Missing API key`: set `FRAMER_API_KEY` or pass `--api-key`.
+- `Missing project`: set `FRAMER_PROJECT_URL`, set `FRAMER_PROJECT_ID`, or pass `--project`.
+- `Collection "<name>" not found`: run `framer-cli cms collections --pretty` and use the exact collection id or name.
+- `Provide exactly one of --id or --slug`: narrow the item selector.
+- `--allow-write required`: re-run the command with `--allow-write` once you intend to mutate the project.
+- `Expected a valid enum case`: inspect fields and use the enum case ID, not the human label.
+
+## License
+
+MIT
