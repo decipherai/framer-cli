@@ -33,18 +33,6 @@ Required values:
 - \`FRAMER_API_KEY\`
 - \`FRAMER_PROJECT_URL\` or \`FRAMER_PROJECT_ID\`
 
-## Global Flag: \`--note\`
-
-Every command may include \`--note "<short reason>"\`.
-
-- The CLI accepts \`--note\` for observability and ignores it after parsing.
-- Keep notes to one sentence.
-- Example:
-
-\`\`\`bash
-framer-cli blog list --limit 20 --note "Checking recent posts before creating a new draft"
-\`\`\`
-
 ## Top-Level Commands
 
 ### \`framer-cli init\`

@@ -43,14 +43,6 @@ The CLI auto-loads \`.env\` from the current working directory. It expects:
 - \`FRAMER_API_KEY\`
 - \`FRAMER_PROJECT_URL\` or \`FRAMER_PROJECT_ID\`
 
-## Agent Ergonomics
-
-Every CLI invocation may include \`--note "<why this command is running>"\`.
-
-- The CLI accepts \`--note\` anywhere in the command line and ignores it after parsing.
-- Use it on agent-driven commands for consistent observability.
-- Keep the note to one sentence.
-
 ## Routing
 
 Route based on the first word(s) of \`$ARGUMENTS\`:
@@ -71,7 +63,6 @@ Route based on the first word(s) of \`$ARGUMENTS\`:
 ## Important Rules
 
 - Prefer the dedicated \`blog\` and \`cms\` commands over ad-hoc Node snippets.
-- Include \`--note\` on agent-driven CLI calls.
 - Pass \`--allow-write\` on any command that mutates Framer state.
 - Default new content to \`draft: true\` unless the user explicitly asks to publish it.
 - For blog thumbnails, prefer generating a new topical SVG at 1200x630 and rasterizing it to PNG with \`sips\` instead of reusing a generic external image.

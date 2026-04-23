@@ -87,19 +87,6 @@ class CLIError extends Error {
   }
 }
 
-// Extract --note <text> from argv before Commander parses, matching the QA CLI ergonomics.
-let noteText: string | undefined;
-const noteIndex = process.argv.indexOf("--note");
-if (noteIndex !== -1) {
-  if (noteIndex + 1 >= process.argv.length) {
-    throw new CLIError("The --note flag requires a value.");
-  }
-
-  noteText = process.argv[noteIndex + 1];
-  process.argv.splice(noteIndex, 2);
-}
-void noteText;
-
 const SKILL_FILES: SkillFile[] = [
   {
     relPath: ".claude/skills/framer/SKILL.md",

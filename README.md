@@ -223,15 +223,6 @@ You can provide item payloads with:
 - `--item-file /path/to/file.json`
 - `--item-file -` to read from stdin
 
-## Agent Notes
-
-Every command accepts `--note "<short reason>"`. The CLI parses and ignores it, which lets agents record why a command is being run without affecting behavior.
-
-```bash
-framer-cli blog list --limit 10 --note "Checking recent posts before creating a draft"
-framer-cli blog upsert --item-file post.json --allow-write --note "Creating the requested draft post"
-```
-
 ## Development
 
 ```bash
